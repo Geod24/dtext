@@ -1,7 +1,7 @@
 {
     "name": "dtext",
     "description": "A library providing a formatter and logger for D",
-    "dflags": [ "-preview=in", "-preview=intpromote" ],
+    "dflags": [ "-preview=in" ],
 
     "configurations": [
         {

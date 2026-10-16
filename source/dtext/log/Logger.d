@@ -1019,5 +1019,5 @@ unittest
         assert(appender.buffers[idx].name == "dummy");
     // Note: This test will break if the line number change, so might need to be frequently updated
     // (as the function name depends on the line of the unittest).
-    assert(appender.buffers[6].name == "dtext.log.Logger.__unittest_L948_C1.__lambda4");
+    assert(appender.buffers[6].name == "dtext.log.Logger.__unittest_L948_C1.__lambda_L981_C17");
 }

@@ -15,8 +15,6 @@
 
 module dtext.log.AppendSysLog;
 
-version (none):
-
 import dtext.log.Appender;
 import dtext.log.Event;
 import dtext.log.ILogger;
@@ -50,8 +48,6 @@ private enum Priority
 
 public class AppendSysLog : Appender
 {
-    import ocean.core.Array : concat;
-
     /***************************************************************************
 
         Layout class for syslog output. Outputs the logger name followed by the
@@ -66,7 +62,7 @@ public class AppendSysLog : Appender
             dg("[");
             dg(event.name);
             dg("] - ");
-            dg(event.toString);
+            dg(event.msg);
         }
     }
 

@@ -15,22 +15,14 @@
 
 *******************************************************************************/
 
-module dtext.log.LayoutDate;
+module dtext.log.layout.LayoutDate;
 
-version (none):
+import dtext.format.Formatter;
+import dtext.log.Appender;
+import dtext.log.Event;
+import dtext.log.ILogger;
 
-import ocean.meta.types.Qualifiers;
-import ocean.text.convert.Formatter;
-import ocean.time.Clock;
-import ocean.time.WallClock;
-import ocean.util.log.Appender;
-import ocean.util.log.Event;
-
-version (unittest)
-{
-    import ocean.core.Test;
-    import ocean.util.log.ILogger;
-}
+import std.datetime.systime;
 
 /*******************************************************************************
 
@@ -62,34 +54,35 @@ public class LayoutDate : Appender.Layout
 
     public override void format (LogEvent event, scope FormatterSink dg)
     {
-        // convert time to field values
-        const tm = event.time;
-        const dt = (localTime) ? WallClock.toDate(tm) : Clock.toDate(tm);
+        const dt = (localTime) ? event.time : event.time.toUTC();
 
         // format date according to ISO-8601 (lightweight formatter)
         sformat(dg, "{u4}-{u2}-{u2} {u2}:{u2}:{u2},{u2} {} [{}] - {}",
-            dt.date.year, dt.date.month, dt.date.day,
-            dt.time.hours, dt.time.minutes, dt.time.seconds, dt.time.millis,
-            event.levelName, event.name, event);
+            dt.year, cast(ubyte) dt.month, dt.day, dt.hour, dt.minute, dt.second,
+            dt.fracSecs.split!("msecs").msecs,
+            ILogger.convert(event.level), event.name, event.msg);
     }
 }
 
 unittest
 {
-       mstring result = new mstring(2048);
-       result.length = 0;
-       assumeSafeAppend(result);
+    import dtext.Test;
+    import core.time;
 
-       scope dg = (in char[] v) { result ~= v; };
-       scope layout = new LayoutDate(false);
-       LogEvent event = {
-           msg_: "Have you met Ted?",
-               name_: "Barney",
-               time_: Time.fromUnixTime(1525048962) + TimeSpan.fromMillis(420),
-               level_: ILogger.Level.Warn,
-               host_: null,
-       };
+    char[] result = new char[](2048);
+    result.length = 0;
+    assumeSafeAppend(result);
 
-       testNoAlloc(layout.format(event, dg));
-       test!("==")(result, "2018-04-30 00:42:42,420 Warn [Barney] - Have you met Ted?");
+    scope dg = (in char[] v) { result ~= v; };
+    scope layout = new LayoutDate(false);
+    LogEvent event = {
+        msg: "Have you met Ted?",
+        name: "Barney",
+        time: SysTime.fromUnixTime(1525048962) + 420.msecs,
+        level: ILogger.Level.Warn,
+        host: null,
+    };
+
+    testNoAlloc(layout.format(event, dg));
+    assert(result == "2018-04-30 00:42:42,420 Warn [Barney] - Have you met Ted?");
 }

@@ -90,10 +90,10 @@ import ocean.util.log.Event;
 import ocean.util.log.ILogger;
 
 // Log layouts
-import ocean.util.log.layout.LayoutMessageOnly;
+import dtext.layout.LayoutMessageOnly;
 import ocean.util.log.layout.LayoutStatsLog;
-import ocean.util.log.layout.LayoutSimple;
-import ocean.util.log.LayoutDate;
+import dtext.log.layout.LayoutSimple;
+import dtext.log.layout.LayoutDate;
 
 import core.sys.posix.strings;
 

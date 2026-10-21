@@ -68,7 +68,7 @@
 
 *******************************************************************************/
 
-module ocean.util.log.Config;
+module dtext.log.Config;
 
 version (none):
 
@@ -168,7 +168,7 @@ class Config
 
     ***************************************************************************/
 
-    bool additive;
+    public bool additive;
 
     /***************************************************************************
 
@@ -177,7 +177,7 @@ class Config
 
     ***************************************************************************/
 
-    bool collect_stats = true;
+    public bool collect_stats = true;
 
     /***************************************************************************
 
@@ -295,7 +295,7 @@ unittest
                 return new SubmarineLayout;
             return ocean.util.log.Config.newLayout(name);
         }
-        ocean.util.log.Config.configureNewLoggers(config, m_config,
+        configureNewLoggers(config, m_config,
             file_appender, &makeLayout, use_insert_appender);
     }
 }
